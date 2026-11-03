@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Upload Dataset — EduPredict{% endblock %}
+{% block page_title %}Upload Dataset{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+  <div class="card-header">
+    <h2 class="card-title">📤 Upload CSV / Excel Dataset</h2>
+  </div>
+
+  <div class="info-box">
+    <p><strong>Supported formats:</strong> .csv, .xlsx</p>
+    <p><strong>Expected columns (recommended):</strong></p>
+    <code>Hours_Studied, Attendance, Sleep_Hours, Previous_Scores, Tutoring_Sessions,
+Physical_Activity, Motivation_Level, Internet_Access, Extracurricular_Activities,
+Access_to_Resources, Parental_Involvement, Exam_Score</code>
+    <p class="mt-1">Column names are matched case-insensitively. Unknown columns are ignored.</p>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" class="student-form" id="uploadForm">
+    <div class="form-group">
+      <label class="form-label">Select File</label>
+      <div class="file-drop" id="fileDrop">
+        <div class="file-drop-icon">📁</div>
+        <p>Drag &amp; drop your file here, or click to browse</p>
+        <input type="file" name="file" id="fileInput" accept=".csv,.xlsx"
+               class="file-input-hidden" required />
+        <p class="file-name" id="fileName">No file chosen</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Duplicate Handling</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" name="skip_duplicates" value="yes" checked />
+          Skip duplicate student identifiers
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="skip_duplicates" value="no" />
+          Import all (may create duplicates)
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" id="uploadBtn">
+        📤 Upload &amp; Preview
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const fileDrop = document.getElementById("fileDrop");
+const fileInput = document.getElementById("fileInput");
+const fileName  = document.getElementById("fileName");
+
+fileDrop.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", () => {
+  fileName.textContent = fileInput.files[0]?.name || "No file chosen";
+});
+fileDrop.addEventListener("dragover", e => { e.preventDefault(); fileDrop.classList.add("dragover"); });
+fileDrop.addEventListener("dragleave", () => fileDrop.classList.remove("dragover"));
+fileDrop.addEventListener("drop", e => {
+  e.preventDefault(); fileDrop.classList.remove("dragover");
+  fileInput.files = e.dataTransfer.files;
+  fileName.textContent = fileInput.files[0]?.name || "No file chosen";
+});
+
+document.getElementById("uploadForm").addEventListener("submit", () => {
+  document.getElementById("uploadBtn").disabled = true;
+  document.getElementById("uploadBtn").textContent = "Processing…";
+});
+</script>
+{% endblock %}

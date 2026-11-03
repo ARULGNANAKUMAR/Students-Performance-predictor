@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Student Performance Predictor{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Sidebar ─────────────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <span class="brand-icon">🎓</span>
+    <span class="brand-text">EduPredict</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="{{ url_for('dashboard') }}"  class="nav-item {% if request.endpoint=='dashboard' %}active{% endif %}">
+      <span class="nav-icon">📊</span><span>Dashboard</span>
+    </a>
+    <a href="{{ url_for('data') }}"       class="nav-item {% if 'data' in request.endpoint %}active{% endif %}">
+      <span class="nav-icon">📋</span><span>Student Data</span>
+    </a>
+    <a href="{{ url_for('upload') }}"     class="nav-item {% if request.endpoint=='upload' %}active{% endif %}">
+      <span class="nav-icon">📤</span><span>Upload Dataset</span>
+    </a>
+    <a href="{{ url_for('add_data') }}"   class="nav-item {% if request.endpoint=='add_data' %}active{% endif %}">
+      <span class="nav-icon">➕</span><span>Add Student</span>
+    </a>
+    <a href="{{ url_for('train') }}"      class="nav-item {% if request.endpoint=='train' %}active{% endif %}">
+      <span class="nav-icon">🤖</span><span>Train Model</span>
+    </a>
+    <a href="{{ url_for('predict') }}"    class="nav-item {% if request.endpoint=='predict' %}active{% endif %}">
+      <span class="nav-icon">🔮</span><span>Predict</span>
+    </a>
+    <a href="{{ url_for('predictions') }}" class="nav-item {% if request.endpoint=='predictions' %}active{% endif %}">
+      <span class="nav-icon">📜</span><span>History</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="model-status-pill" id="modelStatusPill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusLabel">Checking…</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ── Topbar ──────────────────────────────────────────── -->
+<header class="topbar">
+  <button class="burger" id="burgerBtn" aria-label="Toggle menu">☰</button>
+  <span class="topbar-title">{% block page_title %}Student Performance Predictor{% endblock %}</span>
+  <span class="topbar-spacer"></span>
+</header>
+
+<!-- ── Main ───────────────────────────────────────────── -->
+<main class="main-content" id="mainContent">
+
+  <!-- Flash messages -->
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% if msgs %}
+      <div class="flash-container">
+        {% for cat, msg in msgs %}
+          <div class="flash flash-{{ cat }}">
+            <span>{{ msg }}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Overlay for mobile sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

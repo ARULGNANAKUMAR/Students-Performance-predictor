@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if edit else "Add" }} Student — EduPredict{% endblock %}
+{% block page_title %}{{ "Edit" if edit else "Add" }} Student Record{% endblock %}
+
+{% block content %}
+<div class="card form-card">
+  <div class="card-header">
+    <h2 class="card-title">{{ "✏️ Edit" if edit else "➕ Add" }} Student Record</h2>
+    <a href="{{ url_for('data') }}" class="btn btn-secondary btn-sm">← Back</a>
+  </div>
+
+  <form method="POST"
+        action="{{ url_for('edit_data', sid=edit_id) if edit else url_for('add_data') }}"
+        class="student-form">
+
+    <div class="form-section-title">🪪 Identification</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Student Identifier</label>
+        <input type="text" name="student_identifier" class="form-input"
+               value="{{ form.get('student_identifier','') }}"
+               placeholder="e.g. STU-001 (optional)" />
+      </div>
+    </div>
+
+    <div class="form-section-title">📚 Academic Information</div>
+    <div class="form-row three-col">
+      <div class="form-group">
+        <label class="form-label required">Hours Studied / Day</label>
+        <input type="number" name="hours_studied" class="form-input"
+               value="{{ form.get('hours_studied','') }}"
+               min="0" max="24" step="0.5" required placeholder="0–24" />
+      </div>
+      <div class="form-group">
+        <label class="form-label required">Attendance (%)</label>
+        <input type="number" name="attendance" class="form-input"
+               value="{{ form.get('attendance','') }}"
+               min="0" max="100" step="0.1" required placeholder="0–100" />
+      </div>
+      <div class="form-group">
+        <label class="form-label required">Previous Score</label>
+        <input type="number" name="previous_score" class="form-input"
+               value="{{ form.get('previous_score','') }}"
+               min="0" max="100" step="0.1" required placeholder="0–100" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sleep Hours / Day</label>
+        <input type="number" name="sleep_hours" class="form-input"
+               value="{{ form.get('sleep_hours','') }}"
+               min="0" max="24" step="0.5" placeholder="0–24" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tutoring Sessions / Month</label>
+        <input type="number" name="tutoring_sessions" class="form-input"
+               value="{{ form.get('tutoring_sessions','') }}"
+               min="0" max="100" step="1" placeholder="0–100" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Physical Activity (days/yr)</label>
+        <input type="number" name="physical_activity" class="form-input"
+               value="{{ form.get('physical_activity','') }}"
+               min="0" max="365" step="1" placeholder="0–365" />
+      </div>
+    </div>
+
+    <div class="form-section-title">🌟 Lifestyle Factors</div>
+    <div class="form-row three-col">
+      <div class="form-group">
+        <label class="form-label">Study Motivation</label>
+        <select name="study_motivation" class="form-input">
+          <option value="">— Select —</option>
+          {% for val in ["Low","Medium","High"] %}
+          <option value="{{ val }}" {{ "selected" if form.get("study_motivation")==val }}>{{ val }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Internet Access</label>
+        <select name="internet_usage" class="form-input">
+          <option value="">— Select —</option>
+          {% for val in ["Yes","No"] %}
+          <option value="{{ val }}" {{ "selected" if form.get("internet_usage")==val }}>{{ val }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Extracurricular</label>
+        <select name="extracurricular" class="form-input">
+          <option value="">— Select —</option>
+          {% for val in ["Yes","No"] %}
+          <option value="{{ val }}" {{ "selected" if form.get("extracurricular")==val }}>{{ val }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Access to Resources</label>
+        <select name="resources_access" class="form-input">
+          <option value="">— Select —</option>
+          {% for val in ["Low","Medium","High"] %}
+          <option value="{{ val }}" {{ "selected" if form.get("resources_access")==val }}>{{ val }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Parental Support</label>
+        <select name="parental_support" class="form-input">
+          <option value="">— Select —</option>
+          {% for val in ["Low","Medium","High","Very High"] %}
+          <option value="{{ val }}" {{ "selected" if form.get("parental_support")==val }}>{{ val }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label required">Target Exam Score</label>
+        <input type="number" name="target_exam_score" class="form-input"
+               value="{{ form.get('target_exam_score','') }}"
+               min="0" max="100" step="0.1" required placeholder="0–100" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        {{ "💾 Update Record" if edit else "✅ Save Record" }}
+      </button>
+      <a href="{{ url_for('data') }}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

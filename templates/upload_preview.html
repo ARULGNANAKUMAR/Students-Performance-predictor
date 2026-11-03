@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Upload Preview — EduPredict{% endblock %}
+{% block page_title %}Upload Preview{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">🔍 Dataset Preview</h2>
+  </div>
+
+  <!-- Stats -->
+  <div class="preview-stats">
+    <div class="preview-stat"><strong>{{ total_raw }}</strong><br>Total Rows</div>
+    <div class="preview-stat text-success"><strong>{{ num_records }}</strong><br>Ready to Import</div>
+    <div class="preview-stat text-warning"><strong>{{ skipped }}</strong><br>Duplicates Skipped</div>
+    <div class="preview-stat"><strong>{{ columns|length }}</strong><br>Columns Detected</div>
+  </div>
+
+  <!-- Warnings -->
+  {% if warnings %}
+  <div class="warn-box">
+    <strong>⚠️ Data Warnings:</strong>
+    <ul>
+      {% for w in warnings %}<li>{{ w }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <!-- Detected columns -->
+  <div class="tag-row">
+    {% for col in columns %}
+    <span class="tag">{{ col }}</span>
+    {% endfor %}
+  </div>
+
+  <!-- Preview table -->
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          {% for col in columns %}<th>{{ col }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in preview %}
+        <tr>
+          {% for col in columns %}
+          <td>{{ row.get(col, "") }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="text-muted">Showing first 10 rows of {{ total_raw }} total.</p>
+
+  <!-- Confirm / Cancel -->
+  <div class="form-actions mt-1">
+    <form method="POST" action="{{ url_for('upload_confirm') }}" style="display:inline">
+      <button type="submit" class="btn btn-primary">
+        ✅ Confirm Import ({{ num_records }} records)
+      </button>
+    </form>
+    <form method="POST" action="{{ url_for('upload_cancel') }}" style="display:inline">
+      <button type="submit" class="btn btn-secondary">Cancel</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

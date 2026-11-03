@@ -1,0 +1,51 @@
+Hours_Studied,Attendance,Sleep_Hours,Previous_Scores,Tutoring_Sessions,Physical_Activity,Motivation_Level,Internet_Access,Extracurricular_Activities,Access_to_Resources,Parental_Involvement,Exam_Score
+7,85,7,72,2,30,High,Yes,No,High,High,82
+5,78,6,65,1,20,Medium,Yes,Yes,Medium,Medium,72
+3,60,5,50,0,10,Low,No,No,Low,Low,55
+9,95,8,88,4,50,High,Yes,Yes,High,Very High,93
+6,80,7,70,2,25,Medium,Yes,No,Medium,High,75
+2,55,5,45,0,5,Low,No,No,Low,Low,48
+8,90,7,82,3,40,High,Yes,Yes,High,High,89
+4,68,6,60,1,15,Medium,Yes,No,Medium,Medium,64
+10,98,8,92,5,60,High,Yes,Yes,High,Very High,97
+1,45,4,38,0,0,Low,No,No,Low,Low,40
+7,82,7,74,2,30,Medium,Yes,No,Medium,High,80
+5,75,6,67,1,20,Medium,Yes,Yes,Medium,Medium,70
+3,58,5,52,0,8,Low,No,No,Low,Low,53
+9,92,8,86,4,45,High,Yes,Yes,High,Very High,91
+6,79,7,71,2,28,Medium,Yes,No,High,Medium,77
+2,52,5,43,0,5,Low,No,No,Low,Low,46
+8,88,7,80,3,38,High,Yes,Yes,High,High,87
+4,65,6,58,1,12,Low,Yes,No,Medium,Medium,62
+10,96,8,90,5,55,High,Yes,Yes,High,Very High,96
+1,42,4,35,0,0,Low,No,No,Low,Low,38
+7,84,7,75,2,32,High,Yes,No,Medium,High,81
+5,77,6,66,1,18,Medium,Yes,Yes,Medium,Medium,71
+3,62,5,54,0,10,Low,No,No,Low,Low,57
+9,93,8,87,4,48,High,Yes,Yes,High,Very High,92
+6,81,7,72,2,27,Medium,Yes,No,Medium,Medium,76
+2,54,5,44,0,6,Low,No,No,Low,Low,47
+8,89,7,81,3,42,High,Yes,Yes,High,High,88
+4,66,6,59,1,14,Medium,Yes,No,Medium,Medium,63
+10,97,8,91,5,58,High,Yes,Yes,High,Very High,96
+1,44,4,37,0,0,Low,No,No,Low,Low,39
+7,83,7,73,2,31,Medium,Yes,No,High,High,79
+5,76,6,64,1,19,Medium,Yes,Yes,Medium,Medium,69
+3,61,5,53,0,9,Low,No,No,Low,Low,56
+9,94,8,88,4,47,High,Yes,Yes,High,Very High,92
+6,78,7,70,2,26,Medium,Yes,No,Medium,High,74
+2,53,5,42,0,4,Low,No,No,Low,Low,45
+8,87,7,79,3,37,High,Yes,Yes,High,High,86
+4,67,6,61,1,16,Medium,Yes,No,Medium,Medium,65
+10,99,9,93,5,62,High,Yes,Yes,High,Very High,98
+1,46,4,39,0,1,Low,No,No,Low,Low,41
+7,86,7,76,3,33,High,Yes,No,High,High,83
+5,79,6,68,1,21,Medium,Yes,Yes,Medium,Medium,73
+3,63,5,55,0,11,Low,No,No,Low,Low,58
+9,91,8,85,4,44,High,Yes,Yes,High,High,90
+6,80,7,73,2,29,Medium,Yes,No,Medium,Medium,78
+2,56,5,46,0,7,Low,Yes,No,Low,Low,50
+8,91,7,83,3,43,High,Yes,Yes,High,Very High,90
+4,69,6,62,1,17,Medium,Yes,No,Medium,Medium,66
+10,97,8,92,5,59,High,Yes,Yes,High,Very High,97
+1,47,5,40,0,2,Low,No,No,Low,Low,43

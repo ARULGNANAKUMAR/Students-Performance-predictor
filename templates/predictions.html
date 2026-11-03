@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Prediction History — EduPredict{% endblock %}
+{% block page_title %}Prediction History{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">📜 Prediction History <span class="badge">{{ total }}</span></h2>
+    <a href="{{ url_for('predict') }}" class="btn btn-primary btn-sm">🔮 New Prediction</a>
+  </div>
+
+  <form method="GET" class="search-bar">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search by student ID…" class="form-input" />
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    {% if search %}<a href="{{ url_for('predictions') }}" class="btn btn-secondary btn-sm">Clear</a>{% endif %}
+  </form>
+
+  {% if predictions %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student ID</th>
+          <th>Predicted Score</th>
+          <th>Performance</th>
+          <th>Study Hrs</th>
+          <th>Attendance</th>
+          <th>Prev Score</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in predictions %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.student_identifier or "Anonymous" }}</td>
+          <td><strong>{{ "%.1f"|format(p.predicted_score) }}</strong></td>
+          <td>
+            <span class="level-badge level-{{ p.performance_level|replace(' ','') }}">
+              {{ p.performance_level }}
+            </span>
+          </td>
+          <td>{{ p.input_data.get("Hours_Studied", "—") }}</td>
+          <td>{{ p.input_data.get("Attendance", "—") }}{% if p.input_data.get("Attendance") %}%{% endif %}</td>
+          <td>{{ p.input_data.get("Previous_Scores", "—") }}</td>
+          <td>{{ p.created_at }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('delete_prediction', pid=p.id) }}"
+                  onsubmit="return confirm('Delete this prediction?')" style="display:inline">
+              <button type="submit" class="btn-icon btn-icon-danger" title="Delete">🗑️</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    {% if page > 1 %}
+      <a href="?page={{ page-1 }}&search={{ search }}" class="page-btn">← Prev</a>
+    {% endif %}
+    <span class="page-info">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+      <a href="?page={{ page+1 }}&search={{ search }}" class="page-btn">Next →</a>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="empty-state-box">
+    <div class="empty-icon">📭</div>
+    <p>No predictions yet.</p>
+    <a href="{{ url_for('predict') }}" class="btn btn-primary mt-1">Make First Prediction</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

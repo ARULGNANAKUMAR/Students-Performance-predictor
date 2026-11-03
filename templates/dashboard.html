@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — EduPredict{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- Stat cards -->
+<div class="cards-grid">
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#e0e7ff">📚</div>
+    <div>
+      <div class="stat-value">{{ stats.total or 0 }}</div>
+      <div class="stat-label">Total Students</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#d1fae5">🤖</div>
+    <div>
+      <div class="stat-value">{{ stats.total or 0 }}</div>
+      <div class="stat-label">Training Records</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:#fce7f3">🔮</div>
+    <div>
+      <div class="stat-value">{{ pred_count }}</div>
+      <div class="stat-label">Predictions Made</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background:{% if trained %}#d1fae5{% else %}#fee2e2{% endif %}">
+      {% if trained %}✅{% else %}❌{% endif %}
+    </div>
+    <div>
+      <div class="stat-value" style="color:{% if trained %}#10b981{% else %}#ef4444{% endif %}">
+        {{ "Trained" if trained else "Not Trained" }}
+      </div>
+      <div class="stat-label">Model Status</div>
+    </div>
+  </div>
+</div>
+
+<!-- Metrics + avg stats -->
+<div class="two-col">
+  <!-- Model Metrics -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">🤖 Model Performance</h2>
+      {% if not trained %}
+        <a href="{{ url_for('train') }}" class="btn btn-primary btn-sm">Train Now</a>
+      {% endif %}
+    </div>
+    {% if metrics %}
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.4f"|format(metrics.mae) }}</div>
+          <div class="metric-lbl">MAE</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.4f"|format(metrics.rmse) }}</div>
+          <div class="metric-lbl">RMSE</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.4f"|format(metrics.r2_score) }}</div>
+          <div class="metric-lbl">R² Score</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ metrics.training_records }}</div>
+          <div class="metric-lbl">Training Records</div>
+        </div>
+      </div>
+      <p class="text-muted mt-1">Last trained: {{ metrics.trained_at }}</p>
+    {% else %}
+      <p class="empty-state">No model metrics yet. <a href="{{ url_for('train') }}">Train the model</a> first.</p>
+    {% endif %}
+  </div>
+
+  <!-- Dataset averages -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">📊 Dataset Averages</h2>
+    </div>
+    {% if stats.total %}
+      <div class="metrics-grid">
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.1f"|format(stats.avg_score or 0) }}</div>
+          <div class="metric-lbl">Avg Exam Score</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.1f"|format(stats.avg_hours or 0) }}</div>
+          <div class="metric-lbl">Avg Study Hours</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.1f"|format(stats.avg_attendance or 0) }}%</div>
+          <div class="metric-lbl">Avg Attendance</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val">{{ "%.1f"|format(stats.avg_sleep or 0) }}</div>
+          <div class="metric-lbl">Avg Sleep Hours</div>
+        </div>
+      </div>
+      <p class="text-muted mt-1">Score range: {{ "%.1f"|format(stats.min_score or 0) }} – {{ "%.1f"|format(stats.max_score or 0) }}</p>
+    {% else %}
+      <p class="empty-state">No data yet. <a href="{{ url_for('upload') }}">Upload a dataset</a> or <a href="{{ url_for('add_data') }}">add records</a>.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="two-col">
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">📈 Exam Score Distribution</h2></div>
+    <canvas id="scoreChart" height="200"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">⏱ Study Hours Distribution</h2></div>
+    <canvas id="hoursChart" height="200"></canvas>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">🎓 Attendance Distribution</h2></div>
+    <canvas id="attendanceChart" height="200"></canvas>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">🔮 Prediction Distribution</h2></div>
+    <canvas id="predChart" height="200"></canvas>
+  </div>
+</div>
+
+{% if importances %}
+<div class="card">
+  <div class="card-header"><h2 class="card-title">🔑 Top Feature Importances</h2></div>
+  <div class="importance-list">
+    {% for item in importances %}
+    <div class="importance-row">
+      <span class="importance-name">{{ item.feature }}</span>
+      <div class="importance-bar-wrap">
+        <div class="importance-bar" style="width:{{ (item.importance * 100)|round(1) }}%"></div>
+      </div>
+      <span class="importance-pct">{{ (item.importance * 100)|round(1) }}%</span>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+const palette = ["#6366f1","#8b5cf6","#ec4899","#14b8a6","#f59e0b","#ef4444","#22c55e","#3b82f6"];
+
+function makeChart(id, labels, data, label) {
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels,
+      datasets: [{ label, data, backgroundColor: palette, borderRadius: 4 }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+  });
+}
+
+fetch("/api/dashboard/charts").then(r => r.json()).then(d => {
+  makeChart("scoreChart",      d.scores.labels,      d.scores.data,      "Students");
+  makeChart("hoursChart",      d.hours.labels,       d.hours.data,       "Students");
+  makeChart("attendanceChart", d.attendance.labels,  d.attendance.data,  "Students");
+  makeChart("predChart",       d.predictions.labels, d.predictions.data, "Predictions");
+});
+</script>
+{% endblock %}
